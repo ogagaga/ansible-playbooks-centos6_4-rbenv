@@ -1,0 +1,63 @@
+# file: roles/common/tasks/main.yml
+- name: add rpmforge
+  command: rpm --force -Uvh http://pkgs.repoforge.org/rpmforge-release/rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm
+
+- name: add epel
+  command: rpm --force -Uvh http://ftp.jaist.ac.jp/pub/Linux/Fedora/epel/6/x86_64/epel-release-6-8.noarch.rpm
+
+- name: add ius
+  command: rpm --force -Uvh http://dl.iuscommunity.org/pub/ius/stable/Redhat/6/x86_64/ius-release-1.0-11.ius.el6.noarch.rpm
+
+- name: add remi
+  command: rpm --force -Uvh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
+
+- name: yum dependencies
+  yum: name={{ item }} state=installed
+  with_items:
+    - vim-enhanced
+    - git
+    - gcc-c++
+    - autoconf
+    - make
+    - automake
+    - wget
+    - patch
+    - readline-devel
+    - zlib-devel
+    - libffi-devel
+    - openssl-devel
+    - make
+    - bzip2
+    - autoconf
+    - automake
+    - libtool
+    - bison
+    - gdbm-devel
+    - tcl-devel
+    - tk-devel
+    - libxslt-devel
+    - libxml2-devel
+    - libyaml-devel
+    - sqlite-devel
+    - curl
+    - libcurl-devel
+    - ncurses-devel
+    - pcre-devel
+    - gd-devel
+    - bind-utils
+    - yum-plugin-replace
+    - subversion
+    - unzip
+    - man
+    - ntp
+    - tree
+  tags:
+    - common
+
+- name: replace openssl
+  command: yum -y replace openssl --replace-with=openssl10
+
+- name: Copy resolv.conf
+  template: src=vagrant_resolv.conf.j2 dest=/etc/resolv.conf owner=root group=root mode=0644 backup=yes
+  tags:
+  - resolv

@@ -1,0 +1,10 @@
+# setup for vagrant
+- hosts: all
+  user: vagrant
+  sudo: yes
+  vars_files:
+    - group_vars/dev.yml
+
+  roles:
+    - common
+    - rbenv
